@@ -167,6 +167,7 @@ Welcome to the tutorial on deploying your first "Sails Hello World" program on V
     use sails_rs::prelude::*;
 
     pub mod services;
+    use services::my_service::MyService;
 
     #[derive(Default)]
     pub struct MyProgram;
