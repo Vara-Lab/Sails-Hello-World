@@ -66,7 +66,7 @@ Welcome to the tutorial on deploying your first "Sails Hello World" program on V
     ```rust
     [workspace]
     resolver = "2"
-    members = ["wasm", "app"]
+    members = []
 
     [workspace.package]
     version = "0.1.0"
