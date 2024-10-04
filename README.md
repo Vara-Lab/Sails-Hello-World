@@ -1,4 +1,4 @@
-[![Open in Gitpod](https://img.shields.io/badge/Open_in-Gitpod-white?logo=gitpod)]( https://gitpod.io/new/#https://github.com/Vara-Lab/Hello-World.git)
+[![Open in Gitpod](https://img.shields.io/badge/Open_in-Gitpod-white?logo=gitpod)](https://github.com/Vara-Lab/Sails-Hello-World.git)
 
 # Tutorial: Deploying Your First "Sails Hello World" on Vara Network
 
@@ -19,7 +19,7 @@
 
 Welcome to the tutorial on deploying your first "Sails Hello World" program on Vara Network. Vara Network is a decentralized platform for deploying smart contracts and decentralized applications (dApps). This tutorial will guide you through the process of setting up your development environment and deploying a simple smart contract that prints "Hello" on the Vara Network.
 
-## Requisites (ubuntu)
+## Requisites - Important (ubuntu)
 
 1. You need to install GCC and Clang.
 
@@ -45,13 +45,29 @@ Welcome to the tutorial on deploying your first "Sails Hello World" program on V
 ## Step 1: Clone the Smart Contract Template
 
 1. Create a GitHub account if you don't have one already.
-2. Sign in to Gitpod using your GitHub account.[![Open in Gitpod]]( https://gitpod.io/new/#https://github.com/Vara-Lab/Sails-Hello-World.git)
+2. Sign in to Gitpod using your GitHub account.[![Open in Gitpod]](https://gitpod.io/new/#https://github.com/Vara-Lab/Sails-Hello-World.git)
 3. Create a new workspace on Gitpod using the following repository URL: 
 
    ```bash
    https://github.com/Vara-Lab/Sails-Hello-World.git
    ```
+> Note: If you want to test the contract directly, enter the directory with the command:
 
+    ```bash
+    cd hello-world-contract
+    ```
+> Then, compile it with the command:
+    ```bash
+    cargo build --release
+    ```
+
+> Note: If you have an error like the following in your terminal "the `wasm32-unknown-unknown` target may not be installed" you need to install the wasm32 target to compile your contract, run the following command in your terminal and recompile the contract:
+
+    ```bash
+    rustup target add wasm32-unknown-unknown
+    ```
+    
+6. Now, you can upload the contract in the (Gear IDEA)[https://idea.gear-tech.io/programs?node=wss%3A%2F%2Ftestnet.vara.network]
 ## Step 2: Set Up Development Environment
 
 4. Open your terminal and navigate to the directory where you want to store your project files and directories.
@@ -252,6 +268,12 @@ Welcome to the tutorial on deploying your first "Sails Hello World" program on V
 
     ```bash
     cargo build --release
+    ```
+
+> Note: If you have an error like the following in your terminal "the `wasm32-unknown-unknown` target may not be installed" you need to install the wasm32 target to compile your contract, run the following command in your terminal and recompile the contract:
+
+    ```bash
+    rustup target add wasm32-unknown-unknown
     ```
 
 Once the compilation is complete, locate the `app.idl` file in `wasm` directory, and the `wasm.opt.wasm` fie in the `target/wasm32-unknown-unknown/release` directory.
