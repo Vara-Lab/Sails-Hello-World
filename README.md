@@ -224,7 +224,7 @@ Welcome to the tutorial on deploying your first "Sails Hello World" program on V
     touch build.rs
     ```
 
-19. And, add the next code that will "compile" and create the idl file and client for your contract:
+19. And, add the next code in 'wasm/build.rs' that will "compile" and create the idl file and client for your contract:
 
     ```rust
     use sails_idl_gen::program;
