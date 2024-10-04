@@ -53,19 +53,15 @@ Welcome to the tutorial on deploying your first "Sails Hello World" program on V
    ```
 > Note: If you want to test the contract directly, enter the directory with the command:
 
-    ```bash
     cd hello-world-contract
-    ```
+    
 > Then, compile it with the command:
-    ```bash
+
     cargo build --release
-    ```
 
 > Note: If you have an error like the following in your terminal "the `wasm32-unknown-unknown` target may not be installed" you need to install the wasm32 target to compile your contract, run the following command in your terminal and recompile the contract:
 
-    ```bash
     rustup target add wasm32-unknown-unknown
-    ```
     
 6. Now, you can upload the contract in the (Gear IDEA)[https://idea.gear-tech.io/programs?node=wss%3A%2F%2Ftestnet.vara.network]
 ## Step 2: Set Up Development Environment
@@ -272,9 +268,7 @@ Welcome to the tutorial on deploying your first "Sails Hello World" program on V
 
 > Note: If you have an error like the following in your terminal "the `wasm32-unknown-unknown` target may not be installed" you need to install the wasm32 target to compile your contract, run the following command in your terminal and recompile the contract:
 
-    ```bash
     rustup target add wasm32-unknown-unknown
-    ```
 
 Once the compilation is complete, locate the `app.idl` file in `wasm` directory, and the `wasm.opt.wasm` fie in the `target/wasm32-unknown-unknown/release` directory.
 
