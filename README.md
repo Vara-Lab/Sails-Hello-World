@@ -63,7 +63,8 @@ Welcome to the tutorial on deploying your first "Sails Hello World" program on V
 
     rustup target add wasm32-unknown-unknown
     
-6. Now, you can upload the contract in the (Gear IDEA)[https://idea.gear-tech.io/programs?node=wss%3A%2F%2Ftestnet.vara.network]
+Now, you can upload the contract in the (Gear IDEA)[https://idea.gear-tech.io/programs?node=wss%3A%2F%2Ftestnet.vara.network]
+
 ## Step 2: Set Up Development Environment
 
 4. Open your terminal and navigate to the directory where you want to store your project files and directories.
