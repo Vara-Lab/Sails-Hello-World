@@ -176,7 +176,7 @@ Welcome to the tutorial on deploying your first "Sails Hello World" program on V
     pub mod my_service;
     ```
 
-15. With your new service already created, you will create your "program" for your contract, add the following code to the `lib.rs` file:
+15. With your new service already created, you will create your "program" for your contract, add the following code to the `app/src/lib.rs` file:
 
     ```rust
     #![no_std]
