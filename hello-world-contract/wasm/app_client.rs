@@ -23,6 +23,7 @@ impl<R: Remoting + Clone> traits::AppFactory for AppFactory<R> {
         RemotingAction::<_, app_factory::io::New>::new(self.remoting.clone(), ())
     }
 }
+
 pub mod app_factory {
     use super::*;
     pub mod io {
@@ -56,8 +57,10 @@ impl<R: Remoting + Clone> traits::MyService for MyService<R> {
         RemotingAction::<_, my_service::io::Hello>::new(self.remoting.clone(), ())
     }
 }
+
 pub mod my_service {
     use super::*;
+
     pub mod io {
         use super::*;
         use sails_rs::calls::ActionIo;
@@ -77,6 +80,7 @@ pub mod my_service {
         }
     }
 }
+
 pub mod traits {
     use super::*;
     #[allow(dead_code)]
@@ -86,19 +90,10 @@ pub mod traits {
         #[allow(clippy::wrong_self_convention)]
         fn new(&self) -> impl Activation<Args = Self::Args>;
     }
+
     #[allow(clippy::type_complexity)]
     pub trait MyService {
         type Args;
         fn hello(&mut self) -> impl Call<Output = String, Args = Self::Args>;
     }
-}
-#[cfg(feature = "with_mocks")]
-#[cfg(not(target_arch = "wasm32"))]
-extern crate std;
-#[cfg(feature = "with_mocks")]
-#[cfg(not(target_arch = "wasm32"))]
-pub mod mockall {
-    use super::*;
-    use sails_rs::mockall::*;
-    mock! { pub MyService<A> {} #[allow(refining_impl_trait)] #[allow(clippy::type_complexity)] impl<A> traits::MyService for MyService<A> { type Args = A; fn hello (&mut self, ) -> MockCall<A, String>; } }
 }

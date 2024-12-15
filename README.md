@@ -27,25 +27,35 @@ Welcome to the tutorial on deploying your first "Sails Hello World" program on V
     sudo apt install -y build-essential clang cmake curl
     ```
 
-2. Rust: You need to have rust 1.80 or newer to be able to compile your contract
+2. Rust: You need to have rust 1.83 or newer to be able to compile your contract
     - In case that you dont have rust, you need to run the next commands one by one in your terminal:
 
     ```bash
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     rustup target add wasm32-unknown-unknown
+    sudo apt install binaryen
     ```
     
-    - If you have an outdated version of rust, use the following commands in your terminal:
+    - If you have an outdated version of rust and does not have the wasm compiler, use the following commands in your terminal:
 
     ```bash
-    rustup install 1.81
-    rustup default 1.81
+    rustup install 1.83
+    rustup default 1.83
+    rustup target add wasm32-unknown-unknown
+    sudo apt install binaryen
     ```
 
 ## Step 1: Clone the Smart Contract Template
 
 1. Create a GitHub account if you don't have one already.
-2. Sign in to Gitpod using your GitHub account.[![Open in Gitpod]](https://gitpod.io/new/#https://github.com/Vara-Lab/Sails-Hello-World.git)
+2. Sign in to Gitpod using your GitHub account.
+
+<p align="center">
+  <a href="(https://gitpod.io/new/#https://github.com/Vara-Lab/Sails-Hello-World.git" target="_blank">
+    <img src="https://gitpod.io/button/open-in-gitpod.svg" width="240" alt="Gitpod">
+  </a>
+</p>
+
 3. Create a new workspace on Gitpod using the following repository URL: 
 
    ```bash
@@ -59,9 +69,10 @@ Welcome to the tutorial on deploying your first "Sails Hello World" program on V
 
     cargo build --release
 
-> Note: If you have an error like the following in your terminal "the `wasm32-unknown-unknown` target may not be installed" you need to install the wasm32 target to compile your contract, run the following command in your terminal and recompile the contract:
+> Note: If you have an error like the following in your terminal "the `wasm32-unknown-unknown` target may not be installed" or that "rust-src is not installed" you need to install the wasm32 target and the rust-src component (this instruction is for gitpod) to compile your contract, run the following command in your terminal and recompile the contract:
 
     rustup target add wasm32-unknown-unknown
+    rustup component add rust-src --toolchain 1.83-x86_64-unknown-linux-gnu
     
 Now, you can upload the contract in the [Gear IDEA](https://idea.gear-tech.io/programs?node=wss%3A%2F%2Ftestnet.vara.network)
 
@@ -79,16 +90,16 @@ Now, you can upload the contract in the [Gear IDEA](https://idea.gear-tech.io/pr
     ```rust
     [workspace]
     resolver = "2"
-    members = []
+    members = ["app", "wasm"]
 
     [workspace.package]
     version = "0.1.0"
     edition = "2021"
 
     [workspace.dependencies]
-    sails-client-gen = "0.5.0"
-    sails-idl-gen = "0.5.0"
-    sails-rs = "0.5.0"
+    sails-client-gen = "=0.7.1"
+    sails-idl-gen = "=0.7.1"
+    sails-rs = "=0.7.1"
     ```
 
 7. Now, in the directory that is your `Cargo.toml` file, put the next commands in your terminal (this will create your app and wasm directories to create your contract):
@@ -224,31 +235,41 @@ Now, you can upload the contract in the [Gear IDEA](https://idea.gear-tech.io/pr
 19. And, add the next code in 'wasm/build.rs' that will "compile" and create the idl file and client for your contract:
 
     ```rust
-    use sails_idl_gen::program;
-    use std::{env, path::PathBuf};
     use sails_client_gen::ClientGenerator;
+    use std::{env, path::PathBuf, fs};
     use app::MyProgram;
 
     fn main() {
         // Build contract to get .opt.wasm
-        // gear_wasm_builder::build();
         sails_rs::build_wasm();
 
         // Path where the file "Cargo.toml" is located (points to the root of the project)
         // 'CARGO_MANIFEST_DIR' specifies this directory in en::var
         let cargo_toml_path = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
 
+        // Path where the client will be generated 
+        // 'OUT_DIR' points to a temporary directory used by the compiler 
+        // to store files generated at compile time. 
+        let outdir_path = PathBuf::from(env::var("OUT_DIR").unwrap());
+
         // Path where the file "app.idl" will be created
         let idl_path = cargo_toml_path.clone().join("app.idl");
+        let client_path = outdir_path.clone().join("app_client.rs");
 
         // This generate the contract IDL
-        program::generate_idl_to_file::<MyProgram>(idl_path.clone())
+        sails_idl_gen::generate_idl_to_file::<MyProgram>(idl_path.clone())
             .unwrap();
 
         // Generator of the clients of the contract
         ClientGenerator::from_idl_path(&idl_path)
-            .with_mocks("with_mocks")
-            .generate_to(cargo_toml_path.join("app_client.rs"))
+            // .with_mocks("with_mocks")
+            .generate_to(client_path.clone())
+            .unwrap();
+
+        // Then, copies the client that is in the OUT_DIR path in the current
+        // directory (wasm), where the 
+        // "Cargo.toml" file is located 
+        fs::copy(client_path, cargo_toml_path.join("app_client.rs"))
             .unwrap();
     }
     ```
@@ -267,9 +288,10 @@ Now, you can upload the contract in the [Gear IDEA](https://idea.gear-tech.io/pr
     cargo build --release
     ```
 
-> Note: If you have an error like the following in your terminal "the `wasm32-unknown-unknown` target may not be installed" you need to install the wasm32 target to compile your contract, run the following command in your terminal and recompile the contract:
+> Note: If you have an error like the following in your terminal "the `wasm32-unknown-unknown` target may not be installed" or that "rust-src is not installed" you need to install the wasm32 target and the rust-src component (this instruction is for gitpod) to compile your contract, run the following command in your terminal and recompile the contract:
 
     rustup target add wasm32-unknown-unknown
+    rustup component add rust-src --toolchain 1.83-x86_64-unknown-linux-gnu
 
 Once the compilation is complete, locate the `app.idl` file in `wasm` directory, and the `wasm.opt.wasm` fie in the `target/wasm32-unknown-unknown/release` directory.
 
