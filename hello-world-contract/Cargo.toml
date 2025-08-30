@@ -4,9 +4,9 @@ members = ["app", "wasm"]
 
 [workspace.package]
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [workspace.dependencies]
-sails-client-gen = "=0.7.1"
-sails-idl-gen = "=0.7.1"
-sails-rs = "=0.7.1"
+sails-client-gen = "0.9.0"
+sails-idl-gen = "0.9.0"
+sails-rs = "0.9.0"

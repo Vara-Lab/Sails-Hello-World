@@ -1,4 +1,4 @@
-[![Open in Gitpod](https://img.shields.io/badge/Open_in-Gitpod-white?logo=gitpod)](https://github.com/Vara-Lab/Sails-Hello-World.git)
+[![Open in Gitpod](https://img.shields.io/badge/Open_in-Gitpod-white?logo=gitpod)](https://gitpod.io/new/#https://github.com/Vara-Lab/Sails-Hello-World.git)
 
 # Tutorial: Deploying Your First "Sails Hello World" on Vara Network
 
@@ -6,6 +6,7 @@
 
 - [Introduction](#introduction)
 - [Requisites](#requisites-ubuntu)
+
 - [Step 1: Clone the Smart Contract Template](#step-1-clone-the-smart-contract-template)
 - [Step 2: Set Up Development Environment](#step-2-set-up-development-environment)
 - [Step 3: Implement the Smart Contract](#step-3-implement-the-smart-contract)
@@ -27,21 +28,21 @@ Welcome to the tutorial on deploying your first "Sails Hello World" program on V
     sudo apt install -y build-essential clang cmake curl
     ```
 
-2. Rust: You need to have rust 1.83 or newer to be able to compile your contract
+2. Rust: You need to have rust 1.89 or newer to be able to compile your contract
     - In case that you dont have rust, you need to run the next commands one by one in your terminal:
 
     ```bash
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-    rustup target add wasm32-unknown-unknown
+    rustup target add wasm32v1-none
     sudo apt install binaryen
     ```
     
     - If you have an outdated version of rust and does not have the wasm compiler, use the following commands in your terminal:
 
     ```bash
-    rustup install 1.83
-    rustup default 1.83
-    rustup target add wasm32-unknown-unknown
+    rustup install 1.89
+    rustup default 1.89
+    rustup target add wasm32v1-none
     sudo apt install binaryen
     ```
 
@@ -51,7 +52,7 @@ Welcome to the tutorial on deploying your first "Sails Hello World" program on V
 2. Sign in to Gitpod using your GitHub account.
 
 <p align="center">
-  <a href="(https://gitpod.io/new/#https://github.com/Vara-Lab/Sails-Hello-World.git" target="_blank">
+  <a href="https://gitpod.io/new/#https://github.com/Vara-Lab/Sails-Hello-World.git" target="_blank">
     <img src="https://gitpod.io/button/open-in-gitpod.svg" width="240" alt="Gitpod">
   </a>
 </p>
@@ -69,10 +70,10 @@ Welcome to the tutorial on deploying your first "Sails Hello World" program on V
 
     cargo build --release
 
-> Note: If you have an error like the following in your terminal "the `wasm32-unknown-unknown` target may not be installed" or that "rust-src is not installed" you need to install the wasm32 target and the rust-src component (this instruction is for gitpod) to compile your contract, run the following command in your terminal and recompile the contract:
+> Note: If you have an error like the following in your terminal "the `wasm32v1-none` target may not be installed" or that "rust-src is not installed" you need to install the wasm32 target and the rust-src component (this instruction is for gitpod) to compile your contract, run the following command in your terminal and recompile the contract:
 
-    rustup target add wasm32-unknown-unknown
-    rustup component add rust-src --toolchain 1.83-x86_64-unknown-linux-gnu
+    rustup target add wasm32v1-none
+    rustup component add rust-src --toolchain 1.89-x86_64-unknown-linux-gnu
     
 Now, you can upload the contract in the [Gear IDEA](https://idea.gear-tech.io/programs?node=wss%3A%2F%2Ftestnet.vara.network)
 
@@ -94,12 +95,12 @@ Now, you can upload the contract in the [Gear IDEA](https://idea.gear-tech.io/pr
 
     [workspace.package]
     version = "0.1.0"
-    edition = "2021"
+    edition = "2024"
 
     [workspace.dependencies]
-    sails-client-gen = "=0.7.1"
-    sails-idl-gen = "=0.7.1"
-    sails-rs = "=0.7.1"
+    sails-client-gen = "0.9.0"
+    sails-idl-gen = "0.9.0"
+    sails-rs = "0.9.0"
     ```
 
 7. Now, in the directory that is your `Cargo.toml` file, put the next commands in your terminal (this will create your app and wasm directories to create your contract):
@@ -166,12 +167,15 @@ Now, you can upload the contract in the [Gear IDEA](https://idea.gear-tech.io/pr
     #[derive(Default)]
     pub struct MyService;
 
-    #[service]
     impl MyService {
         pub fn new() -> Self {
             Self
         }
+    }
 
+    #[service]
+    impl MyService {
+        #[export]
         pub fn hello(&mut self) -> String {
             "Hello world!".to_string()
         }
@@ -202,7 +206,7 @@ Now, you can upload the contract in the [Gear IDEA](https://idea.gear-tech.io/pr
             Self
         }
 
-        #[route("MyService")]
+        #[export(route = "MyService")]
         pub fn my_service_svc(&self) -> MyService {
             MyService::new()
         }
@@ -288,12 +292,12 @@ Now, you can upload the contract in the [Gear IDEA](https://idea.gear-tech.io/pr
     cargo build --release
     ```
 
-> Note: If you have an error like the following in your terminal "the `wasm32-unknown-unknown` target may not be installed" or that "rust-src is not installed" you need to install the wasm32 target and the rust-src component (this instruction is for gitpod) to compile your contract, run the following command in your terminal and recompile the contract:
+> Note: If you have an error like the following in your terminal "the `wasm32v1-none` target may not be installed" or that "rust-src is not installed" you need to install the wasm32 target and the rust-src component (this instruction is for gitpod) to compile your contract, run the following command in your terminal and recompile the contract:
 
-    rustup target add wasm32-unknown-unknown
-    rustup component add rust-src --toolchain 1.83-x86_64-unknown-linux-gnu
+    rustup target add wasm32v1-none
+    rustup component add rust-src --toolchain 1.89-x86_64-unknown-linux-gnu
 
-Once the compilation is complete, locate the `app.idl` file in `wasm` directory, and the `wasm.opt.wasm` fie in the `target/wasm32-unknown-unknown/release` directory.
+Once the compilation is complete, locate the `app.idl` file in `wasm` directory, and the `wasm.opt.wasm` fie in the `target/wasm32-gear/release` directory.
 
 
 ## Step 6: Interact with Your Contract on Vara Network

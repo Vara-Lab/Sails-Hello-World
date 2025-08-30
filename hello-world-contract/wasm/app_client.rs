@@ -3,9 +3,9 @@
 use sails_rs::collections::BTreeMap;
 #[allow(unused_imports)]
 use sails_rs::{
+    String,
     calls::{Activation, Call, Query, Remoting, RemotingAction},
     prelude::*,
-    String,
 };
 pub struct AppFactory<R> {
     #[allow(dead_code)]

@@ -13,7 +13,7 @@ impl MyProgram {
         Self
     }
 
-    #[route("MyService")]
+    #[export(route = "MyService")]
     pub fn my_service_svc(&self) -> MyService {
         MyService::new()
     }
