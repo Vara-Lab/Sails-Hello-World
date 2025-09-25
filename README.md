@@ -2,7 +2,7 @@
 
 # Tutorial: Deploying Your First "Sails Hello World" on Vara Network
 
-## Tabla of contents
+## Table of contents
 
 - [Introduction](#introduction)
 - [Requisites](#requisites-ubuntu)
